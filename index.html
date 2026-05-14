@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sondage Services — Kinshasa</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #fbfbfd;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --border: #d2d2d7;
+    --card: #ffffff;
+    --success: #34c759;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(251, 251, 253, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    z-index: 100;
+    padding: 14px 0;
+  }
+  nav .nav-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  nav a.logo {
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  
+  /* PAGES */
+  .page { display: none; animation: fadeIn 0.5s ease; }
+  .page.active { display: block; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 90px 22px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 18px;
+    background: linear-gradient(180deg, #1d1d1f 0%, #515154 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero .subtitle {
+    font-size: clamp(18px, 2.2vw, 23px);
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto 14px;
+    font-weight: 400;
+  }
+  .hero .intro {
+    font-size: 17px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin: 0 auto 50px;
+  }
+  
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 22px;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 22px 100px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 22px;
+    padding: 40px 32px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+  .card .icon {
+    font-size: 44px;
+    margin-bottom: 18px;
+  }
+  .card h2 {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .card p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-bottom: 26px;
+    min-height: 70px;
+  }
+  
+  /* BUTTONS */
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 980px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.1s ease;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--accent-hover); }
+  .btn:active { transform: scale(0.97); }
+  .btn.secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .btn.secondary:hover { background: rgba(0,113,227,0.06); }
+  .btn:disabled {
+    background: #d2d2d7;
+    cursor: not-allowed;
+  }
+  
+  /* FORM */
+  .form-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 22px 100px;
+  }
+  .form-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .form-header h1 {
+    font-size: clamp(32px, 4.5vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+  }
+  .form-header p {
+    color: var(--text-secondary);
+    font-size: 18px;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.4s ease;
+    border-radius: 4px;
+  }
+  .progress-text {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+  
+  .question {
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+  .question.active { display: block; }
+  
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  .question .label {
+    display: block;
+    font-size: 13px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .question h3 {
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 30px;
+    line-height: 1.25;
+  }
+  
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .option {
+    display: flex;
+    align-items: center;
+    padding: 18px 22px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 16px;
+  }
+  .option:hover {
+    border-color: var(--accent);
+    background: rgba(0,113,227,0.03);
+  }
+  .option input { margin-right: 14px; accent-color: var(--accent); width: 18px; height: 18px; }
+  .option.selected {
+    border-color: var(--accent);
+    background: rgba(0,113,227,0.06);
+  }
+  
+  /* TEXT INPUT */
+  input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--text);
+    transition: border-color 0.2s ease;
+    margin-bottom: 36px;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  
+  /* NAV BUTTONS */
+  .form-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  
+  /* SUCCESS */
+  .success-screen {
+    text-align: center;
+    padding: 80px 22px;
+    display: none;
+  }
+  .success-screen.active { display: block; animation: fadeIn 0.5s ease; }
+  .success-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+  }
+  .success-screen h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+  .success-screen p {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin-bottom: 36px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 30px 22px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  
+  @media (max-width: 600px) {
+    .hero { padding: 60px 22px 40px; }
+    .card { padding: 32px 22px; }
+    .form-nav { flex-direction: column-reverse; }
+    .btn { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo" onclick="goHome()">Sondage Services</a>
+  </div>
+</nav>
+
+<!-- ============== PAGE D'ACCUEIL ============== -->
+<div id="home" class="page active">
+  <section class="hero">
+    <h1>Votre avis compte.</h1>
+    <p class="subtitle">Aidez-nous à construire une plateforme qui connecte vraiment prestataires et clients à Kinshasa.</p>
+    <p class="intro">Nous lançons un projet pour faciliter la mise en relation entre les professionnels offrant des services (plomberie, coiffure, livraison, etc.) et les personnes qui en ont besoin. Vos réponses, anonymes, nous permettront de concevoir un outil réellement utile.</p>
+  </section>
+  
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🧑‍🔧</div>
+      <h2>Je suis prestataire</h2>
+      <p>Vous offrez un service (plombier, coiffeur, électricien, couturier, livreur, développeur…). Partagez votre réalité de terrain.</p>
+      <button class="btn" onclick="startForm('prestataire')">Commencer le sondage</button>
+    </div>
+    
+    <div class="card">
+      <div class="icon">👥</div>
+      <h2>Je suis client</h2>
+      <p>Vous êtes un utilisateur qui cherche parfois des services au quotidien. Dites-nous ce qui vous bloque et ce que vous attendez.</p>
+      <button class="btn" onclick="startForm('client')">Commencer le sondage</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============== PAGE PRESTATAIRE ============== -->
+<div id="form-prestataire" class="page">
+  <div class="form-container">
+    <div class="form-header">
+      <h1>Questionnaire Prestataire</h1>
+      <p>Quelques minutes pour nous aider à mieux vous servir.</p>
+    </div>
+    
+    <div class="progress-bar"><div class="progress-fill" id="progress-prestataire"></div></div>
+    <div class="progress-text" id="progress-text-prestataire">Question 1 sur 11</div>
+    
+    <form id="formPrestataire" onsubmit="return false;">
+      <!-- Questions injectées par JS -->
+    </form>
+    
+    <div class="success-screen" id="success-prestataire">
+      <div class="success-icon">✅</div>
+      <h2>Merci infiniment !</h2>
+      <p>Vos réponses ont été enregistrées. Elles nous aideront à construire un outil qui vous correspond vraiment.</p>
+      <button class="btn" onclick="goHome()">Retour à l'accueil</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============== PAGE CLIENT ============== -->
+<div id="form-client" class="page">
+  <div class="form-container">
+    <div class="form-header">
+      <h1>Questionnaire Client</h1>
+      <p>Votre expérience nous intéresse.</p>
+    </div>
+    
+    <div class="progress-bar"><div class="progress-fill" id="progress-client"></div></div>
+    <div class="progress-text" id="progress-text-client">Question 1 sur 13</div>
+    
+    <form id="formClient" onsubmit="return false;">
+      <!-- Questions injectées par JS -->
+    </form>
+    
+    <div class="success-screen" id="success-client">
+      <div class="success-icon">✅</div>
+      <h2>Merci infiniment !</h2>
+      <p>Vos réponses ont été enregistrées. Elles nous aideront à construire une plateforme qui répond à vos besoins.</p>
+      <button class="btn" onclick="goHome()">Retour à l'accueil</button>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Sondage Services — Kinshasa</footer>
+
+<script>
+/* ============== DONNÉES DES QUESTIONNAIRES ============== */
+
+const prestataireQuestions = [
+  { label: "Profil", type: "checkbox", q: "Quel service proposez-vous ?", options: ["Plomberie","Électricité","Ménage","Coiffure","Couture","Livraison","Réparation téléphone","Transport","Graphisme","Développement web","Autre"] },
+  { label: "Profil", type: "number", q: "Depuis combien d'années exercez-vous ?", placeholder: "Ex: 5" },
+  { label: "Profil", type: "text", q: "Dans quelle commune travaillez-vous ?", placeholder: "Ex: Gombe, Limete, Ngaliema…" },
+  { label: "Activité", type: "checkbox", q: "Comment trouvez-vous vos clients ?", options: ["WhatsApp","Facebook","Bouche-à-oreille","TikTok","Rue","Autre"] },
+  { label: "Activité", type: "radio", q: "Combien de clients avez-vous par semaine ?", options: ["1–5","6–10","11–20","20+"] },
+  { label: "Activité", type: "radio", q: "Quel est votre plus grand problème ?", options: ["Trouver clients","Confiance clients","Paiements","Concurrence","Visibilité"] },
+  { label: "Digital", type: "radio", q: "Avez-vous un smartphone ?", options: ["Oui","Non"] },
+  { label: "Digital", type: "radio", q: "Utilisez-vous WhatsApp Business ?", options: ["Oui","Non"] },
+  { label: "Digital", type: "radio", q: "Acceptez-vous Mobile Money ?", options: ["Oui","Non"] },
+  { label: "Application", type: "radio", q: "Seriez-vous prêt à utiliser une application pour obtenir plus de clients ?", options: ["Oui","Non"] },
+  { label: "Application", type: "radio", q: "Quel modèle accepteriez-vous ?", options: ["Abonnement mensuel","Commission par client","Gratuit avec publicité","Autre"] }
+];
+
+const clientQuestions = [
+  { label: "Profil", type: "radio", q: "Quel est votre âge ?", options: ["15–24","25–34","35–44","45+"] },
+  { label: "Profil", type: "radio", q: "Quel est votre sexe ?", options: ["Homme","Femme"] },
+  { label: "Profil", type: "text", q: "Dans quelle commune habitez-vous ?", placeholder: "Ex: Gombe, Limete, Masina…" },
+  { label: "Profil", type: "radio", q: "Quelle est votre profession ?", options: ["Étudiant","Salarié","Entrepreneur","Sans emploi","Autre"] },
+  { label: "Recherche", type: "checkbox", q: "Quels services recherchez-vous le plus souvent ?", options: ["Plomberie","Électricité","Ménage","Coiffure","Couture","Livraison","Réparation téléphone","Transport","Graphisme","Développement web","Autre"] },
+  { label: "Recherche", type: "radio", q: "Comment trouvez-vous actuellement un prestataire ?", options: ["WhatsApp","Facebook","Recommandation famille","Recommandation amis","Dans la rue","Google","Autre"] },
+  { label: "Recherche", type: "radio", q: "Quel problème rencontrez-vous le plus ?", options: ["Difficulté à trouver quelqu'un","Manque de confiance","Prix trop élevés","Retards","Mauvaise qualité","Arnaques","Pas de suivi"] },
+  { label: "Recherche", type: "radio", q: "Avez-vous déjà été déçu par un prestataire ?", options: ["Oui","Non"] },
+  { label: "Digital", type: "radio", q: "Utilisez-vous WhatsApp tous les jours ?", options: ["Oui","Non"] },
+  { label: "Digital", type: "radio", q: "Utilisez-vous Mobile Money ?", options: ["Oui","Non"] },
+  { label: "Application", type: "radio", q: "Seriez-vous prêt à utiliser une application pour trouver des prestataires ?", options: ["Oui","Non","Peut-être"] },
+  { label: "Application", type: "checkbox", q: "Quelles fonctionnalités seraient importantes ?", options: ["Avis clients","Notes","Géolocalisation","Prix affichés","Vérification identité","Paiement intégré","Chat WhatsApp","Photos des travaux"] },
+  { label: "Confiance", type: "radio", q: "Comment préférez-vous payer ?", options: ["Payer avant","Payer après","Payer en plusieurs fois"] },
+  { label: "Confiance", type: "checkbox", q: "Quels éléments vous donnent confiance ?", options: ["Avis","Recommandation","Vérification identité","Photos","Réseaux sociaux"] }
+];
+
+/* ============== ÉTAT ============== */
+let currentForm = null;
+let currentIndex = 0;
+let answers = {};
+
+/* ============== NAVIGATION PAGES ============== */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goHome() {
+  showPage('home');
+  currentForm = null;
+  currentIndex = 0;
+  answers = {};
+}
+
+function startForm(type) {
+  currentForm = type;
+  currentIndex = 0;
+  answers = {};
+  const questions = type === 'prestataire' ? prestataireQuestions : clientQuestions;
+  const formId = type === 'prestataire' ? 'formPrestataire' : 'formClient';
+  const successId = type === 'prestataire' ? 'success-prestataire' : 'success-client';
+  
+  document.getElementById(successId).classList.remove('active');
+  renderQuestions(questions, formId, type);
+  showPage('form-' + type);
+  showQuestion(0);
+}
+
+/* ============== RENDU DES QUESTIONS ============== */
+function renderQuestions(questions, formId, type) {
+  const form = document.getElementById(formId);
+  form.innerHTML = '';
+  
+  questions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'question';
+    div.id = `${type}-q-${i}`;
+    
+    let inputsHTML = '';
+    if (q.type === 'radio' || q.type === 'checkbox') {
+      inputsHTML = '<div class="options">';
+      q.options.forEach((opt, j) => {
+        inputsHTML += `
+          <label class="option">
+            <input type="${q.type}" name="${type}-${i}" value="${opt}" onchange="handleChange(this, ${i})">
+            <span>${opt}</span>
+          </label>`;
+      });
+      inputsHTML += '</div>';
+    } else if (q.type === 'text') {
+      inputsHTML = `<input type="text" name="${type}-${i}" placeholder="${q.placeholder || ''}" oninput="handleInput(this, ${i})">`;
+    } else if (q.type === 'number') {
+      inputsHTML = `<input type="number" name="${type}-${i}" placeholder="${q.placeholder || ''}" min="0" oninput="handleInput(this, ${i})">`;
+    }
+    
+    div.innerHTML = `
+      <span class="label">${q.label}</span>
+      <h3>${q.q}</h3>
+      ${inputsHTML}
+      <div class="form-nav">
+        <button type="button" class="btn secondary" onclick="prevQuestion()" ${i === 0 ? 'style="visibility:hidden"' : ''}>← Précédent</button>
+        <button type="button" class="btn" id="${type}-next-${i}" onclick="nextQuestion()" disabled>
+          ${i === questions.length - 1 ? 'Envoyer' : 'Suivant →'}
+        </button>
+      </div>
+    `;
+    form.appendChild(div);
+  });
+}
+
+function handleChange(input, qIndex) {
+  const questions = currentForm === 'prestataire' ? prestataireQuestions : clientQuestions;
+  const q = questions[qIndex];
+  
+  // Visual feedback
+  input.closest('.options').querySelectorAll('.option').forEach(o => {
+    const inp = o.querySelector('input');
+    if (q.type === 'radio') {
+      o.classList.toggle('selected', inp.checked);
+    } else {
+      o.classList.toggle('selected', inp.checked);
+    }
+  });
+  
+  // Store answer
+  if (q.type === 'radio') {
+    answers[qIndex] = input.value;
+  } else {
+    const checked = Array.from(input.closest('.options').querySelectorAll('input:checked')).map(i => i.value);
+    answers[qIndex] = checked;
+  }
+  
+  validateCurrent();
+}
+
+function handleInput(input, qIndex) {
+  answers[qIndex] = input.value.trim();
+  validateCurrent();
+}
+
+function validateCurrent() {
+  const questions = currentForm === 'prestataire' ? prestataireQuestions : clientQuestions;
+  const q = questions[currentIndex];
+  const val = answers[currentIndex];
+  let valid = false;
+  
+  if (q.type === 'checkbox') valid = Array.isArray(val) && val.length > 0;
+  else valid = val !== undefined && val !== '';
+  
+  const btn = document.getElementById(`${currentForm}-next-${currentIndex}`);
+  if (btn) btn.disabled = !valid;
+}
+
+/* ============== NAVIGATION QUESTIONS ============== */
+function showQuestion(i) {
+  const questions = currentForm === 'prestataire' ? prestataireQuestions : clientQuestions;
+  document.querySelectorAll(`#form-${currentForm} .question`).forEach(q => q.classList.remove('active'));
+  document.getElementById(`${currentForm}-q-${i}`).classList.add('active');
+  
+  // Progress
+  const pct = ((i + 1) / questions.length) * 100;
+  document.getElementById(`progress-${currentForm}`).style.width = pct + '%';
+  document.getElementById(`progress-text-${currentForm}`).textContent = `Question ${i + 1} sur ${questions.length}`;
+  
+  validateCurrent();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextQuestion() {
+  const questions = currentForm === 'prestataire' ? prestataireQuestions : clientQuestions;
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    showQuestion(currentIndex);
+  } else {
+    submitForm();
+  }
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    showQuestion(currentIndex);
+  }
+}
+
+/* ============== SOUMISSION ============== */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvMhfpGIs-TyanGyK_IdiP8-vO7CzgILKTtQbVaRpBwTydyeR5f0Q47LiLkR7DAXeF/exec';
+
+function submitForm() {
+  // Affiche un état de chargement (optionnel mais propre)
+  const nextBtn = document.getElementById(`${currentForm}-next-${currentIndex}`);
+  if (nextBtn) {
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Envoi...';
+  }
+  
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors', // important pour éviter les soucis CORS avec Apps Script
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      type: currentForm,
+      answers: answers
+    })
+  })
+  .then(() => {
+    showSuccess();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Une erreur est survenue. Réessayez.");
+    if (nextBtn) {
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'Envoyer';
+    }
+  });
+}
+
+function showSuccess() {
+  const formEl = currentForm === 'prestataire' ? 'formPrestataire' : 'formClient';
+  document.getElementById(formEl).style.display = 'none';
+  document.querySelector(`#form-${currentForm} .progress-bar`).style.display = 'none';
+  document.getElementById(`progress-text-${currentForm}`).style.display = 'none';
+  document.querySelector(`#form-${currentForm} .form-header`).style.display = 'none';
+  document.getElementById(`success-${currentForm}`).classList.add('active');
+}
+
+</script>
+
+</body>
+</html>
