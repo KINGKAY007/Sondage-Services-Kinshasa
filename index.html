@@ -106,7 +106,7 @@ const clientSteps=[
   {id:"email",label:"Adresse e-mail (facultatif)",type:"email",placeholder:"Ex. : nom@exemple.com"}
  ]}
 ];
-const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwO63UMywgHMaIXHII3XgglFHqfExH4C6LTgHmr8dzJu01ArN0XaJP99pIDtIklko-_/exec";
+const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycbw7M0XQDnZ6WULvygZT7woyws1IgPuBkVqk5xpDiPks6_r05F7g2MM4l6KLjN0R4gC-/exec";
 let type="",steps=[],current=0,answers={};
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 function showPage(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}
@@ -164,7 +164,8 @@ function saveDraft(){localStorage.setItem("wiizapp-"+type,JSON.stringify(answers
 function submitSurvey(){
  if(!validateStep())return;
  const button=document.querySelector(".step.active .btn.blue");button.disabled=true;button.textContent="Envoi en cours…";
- fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type,answers})}).then(()=>{localStorage.removeItem("wiizapp-"+type);document.getElementById("surveyForm").hidden=true;document.getElementById("success").hidden=false;document.querySelector(".survey-top").style.display="none";window.scrollTo({top:0,behavior:"smooth"})}).catch(()=>{button.disabled=false;button.textContent="Soumettre définitivement";alert("Une erreur est survenue. Votre brouillon a été conservé.");saveDraft()});
+ const submittedAnswers={...answers,telephone:answers.telephone?"'"+answers.telephone:""};
+ fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type,answers:submittedAnswers})}).then(()=>{localStorage.removeItem("wiizapp-"+type);document.getElementById("surveyForm").hidden=true;document.getElementById("success").hidden=false;document.querySelector(".survey-top").style.display="none";window.scrollTo({top:0,behavior:"smooth"})}).catch(()=>{button.disabled=false;button.textContent="Soumettre définitivement";alert("Une erreur est survenue. Votre brouillon a été conservé.");saveDraft()});
 }
 </script>
 </body>
