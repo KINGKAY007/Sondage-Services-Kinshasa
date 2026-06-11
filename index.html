@@ -84,8 +84,8 @@ const prestataireSteps=[
   c("operateurs","Quels services Mobile Money acceptez-vous ?",["Orange Money","Airtel Money","M-Pesa","Afrimoney","Autre"],{showWhen:["mobile_money","Oui"]})
  ]},
  {title:"WiizApp et vos préférences",intro:"Dernière étape avant la relecture.",fields:[
-  {type:"info",text:"Une application qui aide les prestataires à gagner en visibilité, recevoir des demandes de service et trouver plus de clients."},
-  r("utiliser_app","Seriez-vous prêt à utiliser une application pour développer votre activité ?",["Oui","Non","Peut-être"]),
+  {type:"info",text:"Cette application aide les prestataires à gagner en visibilité, recevoir des demandes de service et trouver plus de clients."},
+  r("utiliser_app","Seriez-vous prêt à utiliser cette application pour développer votre activité ?",["Oui","Non"]),
   r("tarif","Quel modèle tarifaire seriez-vous prêt à accepter pour utiliser l’application ?",["Payer un abonnement mensuel fixe","Payer une commission pour chaque client obtenu","Utiliser l’application gratuitement avec publicité","Autre mode de paiement"]),
   {id:"tarif_autre",label:"Précisez l’autre mode de paiement",type:"text",required:true,showWhen:["tarif","Autre mode de paiement"],placeholder:"Votre proposition"}
  ]},
@@ -97,8 +97,18 @@ const prestataireSteps=[
 ];
 const clientSteps=[
  {title:"Votre profil",intro:"Quelques informations pour mieux comprendre vos besoins.",fields:[r("age","Quel est votre âge ?",["15–24","25–34","35–44","45+"]),r("sexe","Quel est votre sexe ?",["Homme","Femme","Préfère ne pas répondre"]),{id:"commune",label:"Dans quelle commune habitez-vous ?",type:"select",options:communes,required:true}]},
- {title:"Vos recherches",intro:"Parlez-nous des services dont vous avez besoin.",fields:[c("services","Quels services recherchez-vous le plus souvent ?",["Plomberie","Électricité","Ménage","Coiffure","Couture","Livraison","Réparation téléphone","Transport","Graphisme","Développement web","Autre"]),r("recherche","Comment trouvez-vous actuellement un prestataire ?",["WhatsApp","Facebook","Recommandation d’un proche","Dans la rue","Google","Autre"])]},
- {title:"Votre expérience",intro:"Ce qui compte lorsque vous choisissez un prestataire.",fields:[c("problemes","Quels problèmes rencontrez-vous le plus ?",["Difficulté à trouver quelqu’un","Manque de confiance","Prix trop élevés","Retards","Mauvaise qualité","Arnaques","Pas de suivi"]),r("deception","Avez-vous déjà été déçu par un prestataire ?",["Oui","Non"])]},
+ {title:"Vos recherches",intro:"Parlez-nous des services dont vous avez besoin.",fields:[
+  c("services","Quels types de prestataires recherchez-vous le plus souvent ?",["Plomberie","Électricité","Ménage","Coiffure","Couture","Livraison","Réparation téléphone","Transport","Graphisme","Développement web","Autre"]),
+  {id:"services_autre",label:"Précisez le type de prestataire recherché",type:"text",required:true,showWhen:["services","Autre"],placeholder:"Ex. : professeur à domicile, réparateur de climatiseur…"},
+  r("recherche","Comment trouvez-vous actuellement un prestataire ?",["WhatsApp","Facebook","Recommandation d’un proche","Dans la rue","Google","Autre"]),
+  {id:"recherche_autre",label:"Précisez comment vous trouvez actuellement un prestataire",type:"text",required:true,showWhen:["recherche","Autre"],placeholder:"Ex. : groupe communautaire, affiche, association…"}
+ ]},
+ {title:"Votre expérience",intro:"Ce qui compte lorsque vous choisissez un prestataire.",fields:[
+  c("problemes","Quels problèmes rencontrez-vous le plus ?",["Difficulté à trouver quelqu’un","Manque de confiance","Prix trop élevés","Retards","Mauvaise qualité","Arnaques","Pas de suivi","Autre"]),
+  {id:"problemes_autre",label:"Précisez l’autre problème rencontré",type:"text",required:true,showWhen:["problemes","Autre"],placeholder:"Décrivez brièvement le problème"},
+  r("deception","Avez-vous déjà été déçu par un prestataire ?",["Oui","Non"]),
+  {id:"deception_details",label:"Pouvez-vous nous expliquer ce qui vous a déçu ?",type:"text",required:true,showWhen:["deception","Oui"],placeholder:"Ex. : retard, mauvaise qualité, prix différent…"}
+ ]},
  {title:"Vos usages",intro:"Vos habitudes numériques.",fields:[r("whatsapp","Utilisez-vous WhatsApp tous les jours ?",["Oui","Non"]),r("mobile_money","Utilisez-vous Mobile Money ?",["Oui","Non"]),r("utiliser_app","Seriez-vous prêt à utiliser une application pour trouver des prestataires ?",["Oui","Non","Peut-être"])]},
  {title:"Relisez vos réponses",intro:"Vérifiez vos réponses avant de les soumettre définitivement.",review:true,fields:[
   {id:"nom_complet",label:"Nom complet",type:"text",required:true,placeholder:"Votre nom et prénom"},
@@ -165,6 +175,18 @@ function submitSurvey(){
  if(!validateStep())return;
  const button=document.querySelector(".step.active .btn.blue");button.disabled=true;button.textContent="Envoi en cours…";
  const submittedAnswers={...answers,telephone:answers.telephone?"'"+answers.telephone:""};
+ if(type==="client"&&Array.isArray(submittedAnswers.services)&&submittedAnswers.services.includes("Autre")&&submittedAnswers.services_autre){
+  submittedAnswers.services=submittedAnswers.services.map(service=>service==="Autre"?`Autre : ${submittedAnswers.services_autre}`:service);
+ }
+ if(type==="client"&&Array.isArray(submittedAnswers.problemes)&&submittedAnswers.problemes.includes("Autre")&&submittedAnswers.problemes_autre){
+  submittedAnswers.problemes=submittedAnswers.problemes.map(probleme=>probleme==="Autre"?`Autre : ${submittedAnswers.problemes_autre}`:probleme);
+ }
+ if(type==="client"&&submittedAnswers.recherche==="Autre"&&submittedAnswers.recherche_autre){
+  submittedAnswers.recherche=`Autre : ${submittedAnswers.recherche_autre}`;
+ }
+ if(type==="client"&&submittedAnswers.deception==="Oui"&&submittedAnswers.deception_details){
+  submittedAnswers.deception=`Oui : ${submittedAnswers.deception_details}`;
+ }
  fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type,answers:submittedAnswers})}).then(()=>{localStorage.removeItem("wiizapp-"+type);document.getElementById("surveyForm").hidden=true;document.getElementById("success").hidden=false;document.querySelector(".survey-top").style.display="none";window.scrollTo({top:0,behavior:"smooth"})}).catch(()=>{button.disabled=false;button.textContent="Soumettre définitivement";alert("Une erreur est survenue. Votre brouillon a été conservé.");saveDraft()});
 }
 </script>
